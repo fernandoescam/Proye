@@ -139,7 +139,7 @@ public class EntradaDatos {
     }
 
     // ── MENU PRINCIPAL ────────────────────────────────────────
-
+    //Es el cuerpo del menu de Interaccion por medio de leerInt().
     private void menuPrincipal() {
         boolean salir = false;
         while (!salir) {
@@ -185,7 +185,7 @@ public class EntradaDatos {
     }
 
     // ── AGREGAR ───────────────────────────────────────────────
-
+    //Permite agregar una Tarea por medio de ElementoTarea
     private void agregarTarea() {
         if (usuarioActivo instanceof UsuarioGeneral general) {
             if (!general.conteoTarea()) return;
@@ -200,6 +200,7 @@ public class EntradaDatos {
         System.out.println("  Tarea guardada exitosamente.");
     }
 
+    //Permite agregar un recordatorio por medio de ElementoRecordatorio
     private void agregarRecordatorio() {
         if (usuarioActivo instanceof UsuarioGeneral general) {
             if (!general.conteoRecordatorio()) return;
@@ -216,7 +217,7 @@ public class EntradaDatos {
     }
 
     // ── VER / COMPLETAR / ELIMINAR / EDITAR ──────────────────
-
+    //Muestra todos los elementos no terminados.
     private void verPendientes() {
         System.out.println("\n  PENDIENTES \n" + LIN);
         List<Elemento> lista = usuarioActivo.getElemento();
@@ -242,6 +243,7 @@ public class EntradaDatos {
         if (!hay) System.out.println("  Sin pendientes.");
     }
 
+    //Permite cambiar el estado de un elemento Tarea
     private void completar() {
         if (!listar()) return;
         System.out.print("  Numero de Elemento a completar (0 cancela): ");
@@ -259,6 +261,7 @@ public class EntradaDatos {
         }
     }
 
+    //Permite el eliminar un elemento
     private void eliminar() {
         if (!listar()) return;
         System.out.print("  Numero de ID del Elemento a eliminar (0 cancela): ");
@@ -275,6 +278,7 @@ public class EntradaDatos {
         }
     }
 
+    //Permite el editar un elemento
     private void editarElemento() {
         if (!listar()) return;
         System.out.print("  Numero de ID del Elemento a editar (0 cancela): ");
@@ -285,6 +289,7 @@ public class EntradaDatos {
         new EstrategiaEditar(e).ejecutar(lista, e);
     }
 
+    //Muestra todos los elementos actuales
     private void verTodos() {
         System.out.println("\n  TODOS LOS ELEMENTOS\n" + LIN);
         List<Elemento> lista = usuarioActivo.getElemento();
@@ -375,7 +380,7 @@ public class EntradaDatos {
     }
 
     // ── CAMBIAR SUSCRIPCION ───────────────────────────────────
-
+    //Cambia el tipo de suscripcion del Usuario.
     private void cambiarSuscripcion() {
         if (usuarioActivo instanceof UsuarioGeneral general) {
             System.out.println("\n  ACTIVAR PLAN PREMIUM \n");
@@ -407,7 +412,7 @@ public class EntradaDatos {
     }
 
     // ── HELPERS ───────────────────────────────────────────────
-
+    //Busca a todos los usuarios registrados
     private void actualizarUsuarioGlobal(Usuario nuevoUsuario) {
         for (int i = 0; i < todosLosUsuarios.size(); i++) {
             if (todosLosUsuarios.get(i).getEmail().equalsIgnoreCase(nuevoUsuario.getEmail())) {
@@ -417,6 +422,7 @@ public class EntradaDatos {
         }
     }
 
+    //Agrega el elemento a una lista
     private void agregarALista(Elemento e) {
         List<Elemento> lista = usuarioActivo.getElemento();
         if (lista == null) lista = new ArrayList<>();
@@ -424,6 +430,7 @@ public class EntradaDatos {
         usuarioActivo.setElemento(lista);
     }
 
+    //Ingresa los elementos nuevos a las listas del Usuario
     private boolean listar() {
         List<Elemento> lista = usuarioActivo.getElemento();
         if (lista == null || lista.isEmpty()) { System.out.println("  Sin elementos registrados."); return false; }
@@ -436,6 +443,7 @@ public class EntradaDatos {
         return true;
     }
 
+    //Lee el valor de ingrose para el actuar del menu.
     private int leerInt() {
         int numero = -1;
         try { numero = sc.nextInt(); sc.nextLine(); }
