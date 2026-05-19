@@ -27,14 +27,13 @@ public class EntradaDatos {
 
     // Todos los usuarios registrados en el sistema
     private final List<Usuario> todosLosUsuarios = new ArrayList<>();
-
     private int nextId = 1;
     private static final String LIN = "─────────────────────────────────────";
 
     // ── ARRANQUE ──────────────────────────────────────────────
-
     public void iniciar() {
-        System.out.println("  RECORDATORIO DE TAREAS");
+        System.out.println("  BIENVENIDO AL SISTEMA: ");
+        System.out.println("  RECORDATORIO DE TAREAS ");
         System.out.println(LIN);
 
         boolean salir = false;
@@ -54,16 +53,15 @@ public class EntradaDatos {
     }
 
     // ── ACCESO ────────────────────────────────────────────────
-
     private void iniciarSesion() {
         if (todosLosUsuarios.isEmpty()) {
-            System.out.println("  No hay usuarios registrados. Registrate primero.");
+            System.out.println("  No hay usuarios registrados. Primero debes registrarte.");
             return;
         }
 
-        System.out.println("\n  INICIAR SESION\n" + LIN);
-        System.out.print("  Correo    : "); String email    = sc.nextLine().trim();
-        System.out.print("  Contrasena: "); String password = sc.nextLine().trim();
+        System.out.println("\n INICIO DE SESION \n" + LIN);
+        System.out.print("  Correo          : "); String email    = sc.nextLine().trim();
+        System.out.print("  Contrasena      : "); String password = sc.nextLine().trim();
 
         // Buscar usuario por correo en la lista global
         Usuario encontrado = null;
@@ -77,16 +75,18 @@ public class EntradaDatos {
         if (encontrado != null) {
             usuarioActivo = encontrado;
             String tipo = (usuarioActivo instanceof UsuarioPremium) ? "PREMIUM ★" : "General";
-            System.out.println("  Hola de nuevo, " + usuarioActivo.getNombreCompleto() + "! [" + tipo + "]");
+            System.out.println("  Hola, " + usuarioActivo.getNombreCompleto() + "! [" + tipo + "] Se bienvenido nuevamente. ");
             menuPrincipal();
         } else {
-            System.out.println("  Correo o contrasena incorrectos.");
+            System.out.println("ERROR:       El Correo o contrasena son incorrectos.");
+            System.out.println(" Por favor, vuelva a intentarlo... ");
         }
     }
 
     private void registrar() {
         System.out.println("\n  NUEVO USUARIO\n" + LIN);
 
+        //Solicita el ingreso del Nombre, Edad, Correo y Contrasena para registrarlo
         System.out.print("  Nombre    : ");
         String nombre = sc.nextLine().trim();
         while (nombre.isEmpty()) {
@@ -145,19 +145,21 @@ public class EntradaDatos {
         while (!salir) {
             String tipoCuenta = (usuarioActivo instanceof UsuarioPremium) ? "PREMIUM ★" : "General";
             System.out.println("\n" + LIN);
-            System.out.println("  MENU — " + usuarioActivo.getNombreCompleto() + " [" + tipoCuenta + "]");
+            System.out.println("  Hola, Bienvenido Nuevamente!!!");
+            System.out.print(" " + usuarioActivo.getNombreCompleto() + " [" + tipoCuenta + "] " );
+            System.out.println("\n  MENU \n");
             System.out.println(LIN);
-            System.out.println("  [ 1 ] Agregar tarea");
-            System.out.println("  [ 2 ] Agregar recordatorio");
-            System.out.println("  [ 3 ] Ver pendientes");
-            System.out.println("  [ 4 ] Completar tarea");
-            System.out.println("  [ 5 ] Eliminar elemento");
-            System.out.println("  [ 6 ] Ver todos");
-            System.out.println("  [ 7 ] Editar elemento");
-            System.out.println("  [ 8 ] Compartir elemento");
-            System.out.println("  [ 9 ] Cambiar suscripcion");
-            System.out.println("  [ 10] Informacion de usuario");
-            System.out.println("  [ 11] Cerrar sesion");
+            System.out.println("  [ 1  ] Agregar tarea");
+            System.out.println("  [ 2  ] Agregar recordatorio");
+            System.out.println("  [ 3  ] Ver pendientes");
+            System.out.println("  [ 4  ] Completar tarea");
+            System.out.println("  [ 5  ] Eliminar elemento");
+            System.out.println("  [ 6  ] Ver todos los elementos");
+            System.out.println("  [ 7  ] Editar elemento");
+            System.out.println("  [ 8  ] Compartir elemento");
+            System.out.println("  [ 9  ] Cambiar suscripcion");
+            System.out.println("  [ 10 ] Informacion de usuario");
+            System.out.println("  [ 11 ] Cerrar sesion");
             System.out.println(LIN);
             System.out.print("  -> ");
 
@@ -173,7 +175,7 @@ public class EntradaDatos {
                 case 9  -> cambiarSuscripcion();
                 case 10 -> usuarioActivo.imprimirUsuario();
                 case 11 -> {
-                    System.out.println("  Sesion cerrada. Hasta luego, " + usuarioActivo.getNombreCompleto() + "!");
+                    System.out.println("  La sesion fue cerrada exitosamente. Hasta luego, " + usuarioActivo.getNombreCompleto() + "!");
                     usuarioActivo = null;
                     salir = true;
                 }
@@ -188,7 +190,7 @@ public class EntradaDatos {
         if (usuarioActivo instanceof UsuarioGeneral general) {
             if (!general.conteoTarea()) return;
         }
-        System.out.println("\n  AGREGAR TAREA");
+        System.out.println("\n  AGREGAR NUEVA TAREA \n");
         ElementoTarea tarea = new ElementoTarea();
         tarea.setId(nextId++);
         tarea.setFechaCreacion(LocalDate.now());
@@ -202,7 +204,7 @@ public class EntradaDatos {
         if (usuarioActivo instanceof UsuarioGeneral general) {
             if (!general.conteoRecordatorio()) return;
         }
-        System.out.println("\n  AGREGAR RECORDATORIO");
+        System.out.println("\n  AGREGAR NUEVO RECORDATORIO \n");
         ElementoRecordatorio rec = new ElementoRecordatorio();
         rec.setId(nextId++);
         rec.setFechaCreacion(LocalDate.now());
@@ -216,7 +218,7 @@ public class EntradaDatos {
     // ── VER / COMPLETAR / ELIMINAR / EDITAR ──────────────────
 
     private void verPendientes() {
-        System.out.println("\n  PENDIENTES\n" + LIN);
+        System.out.println("\n  PENDIENTES \n" + LIN);
         List<Elemento> lista = usuarioActivo.getElemento();
         if (lista == null || lista.isEmpty()) { System.out.println("  Sin elementos."); return; }
 
@@ -242,7 +244,7 @@ public class EntradaDatos {
 
     private void completar() {
         if (!listar()) return;
-        System.out.print("  Numero a completar (0 cancela): ");
+        System.out.print("  Numero de Elemento a completar (0 cancela): ");
         int idx = leerInt() - 1;
         List<Elemento> lista = usuarioActivo.getElemento();
         if (idx < 0 || idx >= lista.size()) { System.out.println("  Cancelado."); return; }
@@ -259,13 +261,13 @@ public class EntradaDatos {
 
     private void eliminar() {
         if (!listar()) return;
-        System.out.print("  Numero a eliminar (0 cancela): ");
+        System.out.print("  Numero de ID del Elemento a eliminar (0 cancela): ");
         int idx = leerInt() - 1;
         List<Elemento> lista = usuarioActivo.getElemento();
         if (idx < 0 || idx >= lista.size()) { System.out.println("  Cancelado."); return; }
 
         while (true) {
-            System.out.print("  Confirmar? (s/n): ");
+            System.out.print(" El Elemento sera eliminado. \n Desea continuar? (s/n): ");
             String resp = sc.nextLine().trim().toLowerCase();
             if (resp.equals("s"))      { System.out.println("  Eliminado: " + lista.remove(idx).getTitulo()); break; }
             else if (resp.equals("n")) { System.out.println("  Cancelado."); break; }
@@ -275,7 +277,7 @@ public class EntradaDatos {
 
     private void editarElemento() {
         if (!listar()) return;
-        System.out.print("  Numero a editar (0 cancela): ");
+        System.out.print("  Numero de ID del Elemento a editar (0 cancela): ");
         int idx = leerInt() - 1;
         List<Elemento> lista = usuarioActivo.getElemento();
         if (idx < 0 || idx >= lista.size()) { System.out.println("  Cancelado."); return; }
@@ -317,7 +319,7 @@ public class EntradaDatos {
         for (int i = 0; i < propios.size(); i++) {
             System.out.printf("  [%d] %s%n", i + 1, propios.get(i).getTitulo());
         }
-        System.out.print("  Selecciona el elemento (0 cancela): ");
+        System.out.print("  Selecciona el ID del Eemento a compartir (0 cancela): ");
         int idx = leerInt() - 1;
         if (idx < 0 || idx >= propios.size()) { System.out.println("  Cancelado."); return; }
         Elemento elementoACompartir = propios.get(idx);
@@ -376,10 +378,10 @@ public class EntradaDatos {
 
     private void cambiarSuscripcion() {
         if (usuarioActivo instanceof UsuarioGeneral general) {
-            System.out.println("\n  ACTIVAR PLAN PREMIUM");
+            System.out.println("\n  ACTIVAR PLAN PREMIUM \n");
             System.out.println("  Precio   : $4.99/mes");
             System.out.println("  Beneficio: Sin limites de tareas ni recordatorios.");
-            System.out.print("  Confirmar activacion? (s/n): ");
+            System.out.print("  Desea confirmar la activacion? (s/n): ");
             if (sc.nextLine().trim().equalsIgnoreCase("s")) {
                 UsuarioPremium premium = GestorUsuario.convertirAPremium(general);
                 actualizarUsuarioGlobal(premium);
@@ -390,7 +392,7 @@ public class EntradaDatos {
             }
 
         } else if (usuarioActivo instanceof UsuarioPremium premium) {
-            System.out.println("\n  CANCELAR PLAN PREMIUM");
+            System.out.println("\n  CANCELAR PLAN PREMIUM \n");
             System.out.println("  Volveras al plan General (limite: 8 tareas, 4 recordatorios).");
             System.out.print("  Confirmar cancelacion? (s/n): ");
             if (sc.nextLine().trim().equalsIgnoreCase("s")) {
@@ -424,7 +426,7 @@ public class EntradaDatos {
 
     private boolean listar() {
         List<Elemento> lista = usuarioActivo.getElemento();
-        if (lista == null || lista.isEmpty()) { System.out.println("  Sin elementos."); return false; }
+        if (lista == null || lista.isEmpty()) { System.out.println("  Sin elementos registrados."); return false; }
         for (int i = 0; i < lista.size(); i++) {
             Elemento e = lista.get(i);
             String tipo  = (e instanceof ElementoTarea) ? "T" : "R";
@@ -441,17 +443,17 @@ public class EntradaDatos {
         return numero;
     }
 
-    private LocalDate leerFecha() {
-        while (true) {
-            try {
-                System.out.print("  Fecha (dd/MM/yyyy): ");
-                String[] p = sc.nextLine().trim().split("/");
-                LocalDate fecha = LocalDate.of(
-                        Integer.parseInt(p[2]), Integer.parseInt(p[1]), Integer.parseInt(p[0]));
-                if (fecha.isBefore(LocalDate.now())) System.out.println("  La fecha debe ser hoy o futura.");
-                else return fecha;
-            } catch (NumberFormatException e) { System.out.println("  Ingresa solo numeros."); }
-            catch (Exception e)              { System.out.println("  Formato invalido. Usa dd/MM/yyyy."); }
-        }
-    }
+//    private LocalDate leerFecha() {
+//        while (true) {
+//            try {
+//                System.out.print(" La Fecha(dd/MM/yyyy) de registro es: ");
+//                String[] p = sc.nextLine().trim().split("/");
+//                LocalDate fecha = LocalDate.of(
+//                        Integer.parseInt(p[2]), Integer.parseInt(p[1]), Integer.parseInt(p[0]));
+//                if (fecha.isBefore(LocalDate.now())) System.out.println("  La fecha debe ser hoy o futura.");
+//                else return fecha;
+//            } catch (NumberFormatException e) { System.out.println("  Ingresa solo numeros."); }
+//            catch (Exception e)              { System.out.println("  Formato invalido. Usa dd/MM/yyyy."); }
+//        }
+//    }
 }
